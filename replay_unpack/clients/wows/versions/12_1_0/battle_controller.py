@@ -136,7 +136,13 @@ class BattleController(IBattleController):
         return deaths
 
     def _getCapturePointsInfo(self):
-        return self.battle_logic.properties['client']['state'].get('controlPoints', [])
+        cap_ids = self.battle_logic.properties['client']['state'].get('controlPoints', [])
+        caps = []
+        for cap_id in cap_ids:
+            cap = self.entities[cap_id]
+            pos = cap.position
+            caps.append(dict(cap.properties['client'], position=dict(x=pos.x, y=pos.y, z=pos.z)))
+        return caps
 
     def _getTasksInfo(self):
         tasks = self.battle_logic.properties['client']['state'].get('tasks', [])
